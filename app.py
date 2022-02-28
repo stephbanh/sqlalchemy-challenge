@@ -97,7 +97,7 @@ def tobs():
         # # Return JSON of dict
         return jsonify(tobs_dict)
 
-#/api/v1.0/<start> 
+#/api/v1.0/start 
 #Return a JSON list of the minimum temperature, the average temperature, and the max temperature for a given start or start-end range.
 #When given the start only, calculate TMIN, TAVG, and TMAX for all dates greater than and equal to the start date.
 # requires user input ideally but for the sake of demonstration, a hard value will be given
@@ -116,7 +116,7 @@ def start_day():
         # Return of dict
         return jsonify(start_day_dict)
 
-#/api/v1.0/<start>/<end>
+#/api/v1.0/startend>
 #When given the start and the end date, calculate the TMIN, TAVG, and TMAX for dates between the start and end date inclusive
 @app.route("/api/v1.0/startend")
 def start_end_day():
