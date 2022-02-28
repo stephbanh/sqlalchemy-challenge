@@ -1,5 +1,4 @@
 import datetime as dt
-import pandas as pd
 import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
@@ -51,7 +50,7 @@ def home():
         f"/api/v1.0/start<br/>"
         f"Start Date Summary Statistics<br/>"
         f"<br/>"
-        f"/api/v1.0/start/end<br/>"
+        f"/api/v1.0/startend<br/>"
         f"Start and End Date Summary Statistics<br/>"
     )
 
@@ -101,23 +100,38 @@ def tobs():
 #/api/v1.0/<start> 
 #Return a JSON list of the minimum temperature, the average temperature, and the max temperature for a given start or start-end range.
 #When given the start only, calculate TMIN, TAVG, and TMAX for all dates greater than and equal to the start date.
-@app.route("/api/v1.0/<start>")
-def start_day(start):
-        start_day = session.query(measurement.date, func.min(measurement.tobs), func.avg(measurement.tobs), func.max(measurement.tobs)).filter(measurement.date >= start).group_by(measurement.date).all()
-        # convert to dict
-        start_day_dict = dict(start_day)
+# requires user input ideally but for the sake of demonstration, a hard value will be given
+@app.route("/api/v1.0/start")
+def start_day():
+        start = dt.date(2017,8,23) - dt.timedelta(days=365)
+        start_data = session.query(measurement.date, 
+        func.min(measurement.tobs), 
+        func.avg(measurement.tobs), 
+        func.max(measurement.tobs)).filter(measurement.date >= start).group_by(measurement.date).all()
+
+         # due to the additional values; a for loop is needed to make the conversion to dict
+        start_day_dict = {}
+        for i in start_data:
+            start_day_dict[i[0]] = i[1],i[2],i[3]
         # Return of dict
         return jsonify(start_day_dict)
 
 #/api/v1.0/<start>/<end>
 #When given the start and the end date, calculate the TMIN, TAVG, and TMAX for dates between the start and end date inclusive
-@app.route("/api/v1.0/<start>/<end>")
-def start_end_day(start, end):
-        start_and_end_day = session.query(measurement.date, func.min(measurement.tobs), func.avg(measurement.tobs), func.max(measurement.tobs)).filter(measurement.date >= start).filter(measurement.date <= end).group_by(measurement.date).all()
-        # covert the tuples
-        start_and_end_day_dict = dict(start_and_end_day)
+@app.route("/api/v1.0/startend")
+def start_end_day():
+        start = dt.date(2017,8,23) - dt.timedelta(days=365)
+        end = dt.date(2017,8,23)
+        start_and_end_day = session.query(measurement.date, 
+        func.min(measurement.tobs), 
+        func.avg(measurement.tobs), 
+        func.max(measurement.tobs)).filter(measurement.date >= start).filter(measurement.date <= end).group_by(measurement.date).all()
+        # due to the additional values; a for loop is needed to make the conversion to dict
+        start_and_end_day_dict = {}
+        for i in start_and_end_day:
+            start_and_end_day_dict[i[0]] = i[1],i[2],i[3]
         # # Return JSON of dict
-        return jsonify(start_and_end_day_dict)
+        return start_and_end_day_dict
 
 if __name__ == "__main__":
     app.run(debug=True)
