@@ -15,3 +15,5 @@ Use pandas library to make bar graph. Out put summary statistics to console.
 Use SQL Alchemy to find the most active stations and use it to calculate highest, lowest and average temperature over the last 12 months.
 Use pandas to make a histograms with 12 bins. 
 
+<img width="801" alt="image" src="https://user-images.githubusercontent.com/91814465/160504168-7889bf3e-14e4-4903-babf-856107b2173f.png">
+
